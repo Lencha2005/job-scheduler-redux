@@ -2,9 +2,9 @@ import { MdClose } from 'react-icons/md';
 // 1. Імпортуємо хук
 import { useDispatch } from "react-redux";
 // 2. Імпортуємо фабрику екшену
-import { deleteTask, toggleCompleted } from "../../redux/actions";
 
 import css from './Task.module.css';
+import { deleteTask, toggleCompleted } from '../../redux/tasksSlice';
 
 export const Task = ({ task }) => {
 

@@ -2,9 +2,9 @@ import { Button } from '../Button/Button';
 // 1. Імпортуємо хук
 import { useSelector, useDispatch } from "react-redux";
 // 2. Імпортуємо фабрику екшену
-import { setStatusFilter } from "../../redux/actions";
 
 import css from './StatusFilter.module.css';
+import { setStatusFilter } from '../../redux/filtersSlice';
 
 export const StatusFilter = () => {
   // 3. Отримуємо посилання на функцію відправки екшенів
