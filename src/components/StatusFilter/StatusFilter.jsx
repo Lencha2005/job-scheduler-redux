@@ -1,19 +1,15 @@
 import { Button } from '../Button/Button';
-// 1. Імпортуємо хук
 import { useSelector, useDispatch } from "react-redux";
-// 2. Імпортуємо фабрику екшену
-
-import css from './StatusFilter.module.css';
 import { setStatusFilter } from '../../redux/filtersSlice';
 
-export const StatusFilter = () => {
-  // 3. Отримуємо посилання на функцію відправки екшенів
-  const dispatch = useDispatch();
-  // 2. Отримуємо значення фільтра із стану Redux
-  const filter = useSelector(state => state.filters.status);
+import css from './StatusFilter.module.css';
 
-  // 4. Викликаємо фабрику екшену та передаємо значення фільтра
-  // 5. Відправляємо результат - екшен зміни фільтра
+export const StatusFilter = () => {
+  // Отримуємо посилання на функцію відправки екшенів
+  const dispatch = useDispatch();
+  // Отримуємо значення фільтра із стану Redux
+  const filter = useSelector(state => state.filters.status);
+  
   const handleFilterChange = filter => dispatch(setStatusFilter(filter));
 
 

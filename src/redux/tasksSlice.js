@@ -1,144 +1,62 @@
-import { createAction } from '@reduxjs/toolkit';
+
 import { createSlice } from "@reduxjs/toolkit";
+import { addTask, deleteTask, fetchTasks, toggleCompleted } from "./operations";
+// Імпортуємо операцію
+//винесли ідентичні функції
+const handlePending = state => {
+  state.isLoading = true;
+};
 
-// // Перенесли екшени пов'язані із завданнями у файл слайса
-// export const addTask = createAction('tasks/addTask');
-
-// export const deleteTask = createAction('tasks/deleteTask');
-
-// export const toggleCompleted = createAction('tasks/toggleCompleted');
-
-// // Початковий стан слайса
-// const initialState = {
-//   items: [
-//     { id: 0, text: 'Learn HTML and CSS', completed: true },
-//     { id: 1, text: 'Get good at JavaScript', completed: true },
-//     { id: 2, text: 'Master React', completed: false },
-//     { id: 3, text: 'Discover Redux', completed: false },
-//     { id: 4, text: 'Build amazing apps', completed: false },
-//   ],
-// };
-
-// // Експортуємо редюсер слайса
-// export default function tasksReducer(state = initialState, action) {
-//   switch (action.type) {
-//     case 'tasks/addTask': {
-//       return {
-//         ...state,
-//         items: [...state.items, action.payload],
-//       };
-//     }
-
-//     case 'tasks/deleteTask':
-//       return {
-//         ...state,
-//         items: state.items.filter((task) => task.id !== action.payload),
-//       };
-
-//     case 'tasks/toggleCompleted':
-//       return {
-//         ...state,
-//         items: state.items.map((task) => {
-//           if (task.id !== action.payload) {
-//             return task;
-//           }
-//           return {
-//             ...task,
-//             completed: !task.completed,
-//           };
-//         }),
-//       };
-
-//     default:
-//       return state;
-//   }
-// };
-
-// const slice = createSlice({
-//   // Ім'я слайсу
-//   name: "tasks",
-//   // Початковий стан редюсера слайсу
-//   initialState: {
-// 		items: [
-// 	    { id: 0, text: 'Learn HTML and CSS', completed: true },
-// 	    { id: 1, text: 'Get good at JavaScript', completed: true },
-// 	    { id: 2, text: 'Master React', completed: false },
-// 	    { id: 3, text: 'Discover Redux', completed: false },
-// 	    { id: 4, text: 'Build amazing apps', completed: false },
-// 	  ],
-// 	},
-//   // Об'єкт case-редюсерів
-//   reducers: {
-//     addTask: (state, action) => {},
-//     deleteTask: (state, action) => {},
-//     toggleCompleted: (state, action) => {},
-//   },
-// });
-
-// // Експортуємо фабрики екшенів
-// export const { addTask, deleteTask, toggleCompleted } = slice.actions;
-
-// // Експортуємо редюсер слайсу
-// export default slice.reducer;
+const handleRejected = (state, action) => {
+  state.isLoading = false;
+  state.error = action.payload;
+};
 
 
-const slice = createSlice({
-  // Ім'я слайсу
+const tasksSlice = createSlice({
   name: "tasks",
-  // Початковий стан редюсера слайсу
   initialState: {
-		items: [
-	    { id: 0, text: 'Learn HTML and CSS', completed: true },
-	    { id: 1, text: 'Get good at JavaScript', completed: true },
-	    { id: 2, text: 'Master React', completed: false },
-	    { id: 3, text: 'Discover Redux', completed: false },
-	    { id: 4, text: 'Build amazing apps', completed: false },
-	  ],
-	},
-  // Об'єкт case-редюсерів
-  reducers: {
-    addTask: (state, action) => {
-	    // return {
-      //   ...state,
-      //   items: [...state.items, action.payload],
-      // };
-      // ✅ Immer замінить це на операцію оновлення
-      state.items.push(action.payload);
-    },
-    deleteTask: (state, action) => {
-	    // return {
-      //   ...state,
-      //   items: state.items.filter((task) => task.id !== action.payload),
-      // };
-      // ✅ Immer замінить це на операцію оновлення
-      state.items = state.items.filter(item => item.id !== action.payload);
-    },
-    toggleCompleted: (state, action) => {
-	    // return {
-      //   ...state,
-      //   items: state.items.map((task) => {
-      //     if (task.id !== action.payload) {
-      //       return task;
-      //     }
-      //     return {
-      //       ...task,
-      //       completed: !task.completed,
-      //     };
-      //   }),
-      // };
-       // ✅ Immer замінить це на операцію оновлення
-       for (const task of state.items) {
-        if (task.id === action.payload) {
-          task.completed = !task.completed;
-          break;
-        }
-      }
-    },
+    items: [],
+    isLoading: false,
+    error: null,
   },
-});
+  extraReducers: builder => {
+    builder
+    .addCase(fetchTasks.pending, handlePending)
+      .addCase(fetchTasks.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        state.items = action.payload;
+      })
+      .addCase(fetchTasks.rejected, handleRejected)
+      .addCase(addTask.pending, handlePending)
+      .addCase(addTask.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        state.items.push(action.payload);
+      })
+      .addCase(addTask.rejected, handleRejected)
+      .addCase(deleteTask.pending, handlePending)
+      .addCase(deleteTask.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        const index = state.items.findIndex(
+          task => task.id === action.payload.id
+        );
+        state.items.splice(index, 1);
+      })
+      .addCase(deleteTask.rejected, handleRejected)
+      .addCase(toggleCompleted.pending, handlePending)
+      .addCase(toggleCompleted.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        const index = state.items.findIndex(
+          task => task.id === action.payload.id
+        );
+        state.items.splice(index, 1, action.payload);
+      })
+      .addCase(toggleCompleted.rejected, handleRejected);
+  },
+  });
 
-// Експортуємо фабрики екшенів
-export const { addTask, deleteTask, toggleCompleted } = slice.actions;
-
-// Експортуємо редюсер слайсу
-export default slice.reducer;
+export default tasksSlice.reducer;
