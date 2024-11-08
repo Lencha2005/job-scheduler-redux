@@ -1,48 +1,48 @@
-import { createAction } from '@reduxjs/toolkit';
-import { createSlice } from "@reduxjs/toolkit";
+// import { createAction } from '@reduxjs/toolkit';
+// import { createSlice } from "@reduxjs/toolkit";
 
-// // Перенесли екшени пов'язані із завданнями у файл слайса
-// export const setStatusFilter = createAction('filters/setStatusFilter');
+// // // Перенесли екшени пов'язані із завданнями у файл слайса
+// // export const setStatusFilter = createAction('filters/setStatusFilter');
 
-// // Початковий стан слайса
-// const initialState = {
-//   status: 'all',
-// };
+// // // Початковий стан слайса
+// // const initialState = {
+// //   status: 'all',
+// // };
 
-// // Експортуємо редюсер слайса
-// export default function filtersReducer(state = initialState, action) {
-//   switch (action.type) {
-//     case 'filters/setStatusFilter':
-//       return {
-//         ...state,
-//         status: action.payload,
-//       };
+// // // Експортуємо редюсер слайса
+// // export default function filtersReducer(state = initialState, action) {
+// //   switch (action.type) {
+// //     case 'filters/setStatusFilter':
+// //       return {
+// //         ...state,
+// //         status: action.payload,
+// //       };
 
-//     default:
-//       return state;
-//   }
-// };
+// //     default:
+// //       return state;
+// //   }
+// // };
 
-const slice = createSlice({
-  name: "filters",
-  initialState: {
-	  status: "all",
-  },
-  reducers: {
-    setStatusFilter(state, action) {
-	    // return {
-      //   ...state,
-      //   status: action.payload,
-      // };
-      // ✅ Immer замінить це на операцію оновлення
-      state.status = action.payload;
-    },
-  },
-});
+// const slice = createSlice({
+//   name: "filters",
+//   initialState: {
+// 	  status: "all",
+//   },
+//   reducers: {
+//     setStatusFilter(state, action) {
+// 	    // return {
+//       //   ...state,
+//       //   status: action.payload,
+//       // };
+//       // ✅ Immer замінить це на операцію оновлення
+//       state.status = action.payload;
+//     },
+//   },
+// });
 
 
-// Експортуємо фабрики екшенів
-export const { setStatusFilter } = slice.actions;
+// // Експортуємо фабрики екшенів
+// export const { setStatusFilter } = slice.actions;
 
-// Експортуємо редюсер слайсу
-export default slice.reducer;
+// // Експортуємо редюсер слайсу
+// export default slice.reducer;

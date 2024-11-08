@@ -1,6 +1,7 @@
 
 import { createSlice } from "@reduxjs/toolkit";
-import { addTask, deleteTask, fetchTasks, toggleCompleted } from "./operations";
+import { addTask, deleteTask, fetchTasks } from "./operations";
+import { logOut } from "../auth/operations";
 // Імпортуємо операцію
 //винесли ідентичні функції
 const handlePending = state => {
@@ -11,7 +12,6 @@ const handleRejected = (state, action) => {
   state.isLoading = false;
   state.error = action.payload;
 };
-
 
 const tasksSlice = createSlice({
   name: "tasks",
@@ -46,17 +46,12 @@ const tasksSlice = createSlice({
         state.items.splice(index, 1);
       })
       .addCase(deleteTask.rejected, handleRejected)
-      .addCase(toggleCompleted.pending, handlePending)
-      .addCase(toggleCompleted.fulfilled, (state, action) => {
+      .addCase(logOut.fulfilled, (state) => {
+        state.items = [];
         state.isLoading = false;
         state.error = null;
-        const index = state.items.findIndex(
-          task => task.id === action.payload.id
-        );
-        state.items.splice(index, 1, action.payload);
       })
-      .addCase(toggleCompleted.rejected, handleRejected);
   },
   });
 
-export default tasksSlice.reducer;
+export const tasksReducer = tasksSlice.reducer;
